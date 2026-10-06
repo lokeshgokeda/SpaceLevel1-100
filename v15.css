@@ -1,0 +1,124 @@
+/* NEBULA PROTOCOL v15 — Command Matrix visual layer. Loaded last; only adds/overrides what v15 needs. */
+:root{--v15-bg:rgba(6,14,28,.82);--v15-line:rgba(56,217,255,.35);--v15-ac:#38d9ff}
+html,body{overscroll-behavior:none}
+body.v14-combat,body.v14-combat canvas,body.v14-combat #hud{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+body.v14-combat{overflow:hidden}
+#v14CombatUI button,.v15-panel button{touch-action:manipulation}
+
+/* ---- HUD strip (inside the v14 matrix, under the top row) ---- */
+.v15-strip{position:absolute;left:50%;top:var(--v15-top,104px);transform:translateX(-50%);display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:min(860px,calc(100vw - 440px));pointer-events:none;z-index:3}
+.v15-cell{display:flex;align-items:center;gap:6px;padding:4px 9px;background:var(--v15-bg);border:1px solid var(--v15-line);border-radius:8px;font:700 .62rem/1 Orbitron,system-ui,sans-serif;letter-spacing:.06em;color:#bfe6ff;min-height:24px}
+.v15-cell span{opacity:.65;font-size:.52rem}
+.v15-cell b{color:#fff;font-weight:800;white-space:nowrap}
+.v15-bar{width:64px;height:6px;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden}
+.v15-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff9d2e,#ffe14a);transition:width .18s linear}
+.v15-bar.sh i{background:linear-gradient(90deg,#38d9ff,#8affff)}
+#v15AbFill{background:linear-gradient(90deg,#7d4dff,#c9a0ff)}
+.v15-cell.ult.rdy{border-color:#ffcc33;box-shadow:0 0 14px rgba(255,204,51,.55);animation:v15pulse 1s ease-in-out infinite}
+.v15-cell.boss{display:none;border-color:rgba(255,51,85,.6)}.v15-cell.boss.show{display:flex}.v15-cell.boss span{color:#ff8a9a;opacity:1}
+@keyframes v15pulse{50%{box-shadow:0 0 24px rgba(255,204,51,.9)}}
+.v15-ultbtn{background:linear-gradient(135deg,rgba(255,204,51,.28),rgba(255,90,40,.28))!important;border-color:#ffcc33!important;color:#fff3c0!important;letter-spacing:.14em;min-height:44px}
+
+/* ---- banners ---- */
+.v15-banner{position:fixed;left:50%;top:calc(var(--v15-top,104px) + var(--v15-sh,28px) + 8px);transform:translate(-50%,-8px);z-index:9000;pointer-events:none;opacity:0;padding:8px 18px;max-width:92vw;text-align:center;font:900 clamp(.7rem,2.6vw,1.05rem)/1.2 Orbitron,system-ui,sans-serif;letter-spacing:.14em;color:var(--c,#38d9ff);background:rgba(4,10,22,.78);border:1px solid var(--c,#38d9ff);border-radius:10px;text-shadow:0 0 12px var(--c,#38d9ff);transition:opacity .2s,transform .2s}
+.v15-banner.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---- command center modal ---- */
+.v15-panel{position:fixed;inset:0;z-index:9500;display:none;align-items:center;justify-content:center;padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom));background:rgba(2,6,14,.74);backdrop-filter:blur(3px)}
+.v15-panel.open{display:flex}
+.v15-card{width:min(640px,100%);max-height:100%;display:flex;flex-direction:column;background:linear-gradient(160deg,#07142a,#050b18);border:1px solid var(--v15-line);border-radius:14px;box-shadow:0 0 40px rgba(56,217,255,.18);overflow:hidden;animation:v15in .18s ease-out}
+@keyframes v15in{from{opacity:0;transform:translateY(10px) scale(.98)}}
+.v15-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--v15-line)}
+.v15-head h3{margin:0;font:900 1.05rem Orbitron,system-ui,sans-serif;letter-spacing:.12em;color:#fff}
+.v15-eye{font:700 .55rem Orbitron,system-ui,sans-serif;letter-spacing:.2em;color:var(--v15-ac);opacity:.8}
+.v15-x{min-width:44px;min-height:44px;border-radius:10px;border:1px solid var(--v15-line);background:transparent;color:#fff;font-size:1rem;cursor:pointer}
+.v15-tabs{display:flex;gap:6px;padding:8px 12px 0}
+.v15-tabs button{flex:1;min-height:42px;border:1px solid var(--v15-line);border-bottom:none;border-radius:8px 8px 0 0;background:rgba(255,255,255,.03);color:#9bb8d4;font:800 .62rem Orbitron,system-ui,sans-serif;letter-spacing:.1em;cursor:pointer}
+.v15-tabs button:hover{background:rgba(56,217,255,.1)}.v15-tabs button.on{background:rgba(56,217,255,.18);color:#fff}
+.v15-tabs button[data-v15tab="god"].on{background:rgba(255,90,40,.22);border-color:#ff5a2d}
+.v15-body{padding:14px;overflow:auto;-webkit-overflow-scrolling:touch;min-height:0}
+.v15-keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px}
+.v15-keys div{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;background:rgba(255,255,255,.04);border-radius:8px;font:600 .72rem system-ui,sans-serif;color:#b9d2ea}
+.v15-keys b{color:#fff;font-family:Orbitron,system-ui,sans-serif;font-size:.64rem;text-align:right}
+.v15-note{margin-top:12px;font:500 .72rem/1.5 system-ui,sans-serif;color:#9bb8d4}.v15-note b{color:#fff}
+.v15-warn{padding:10px 12px;border:1px solid #ff5a2d;border-radius:10px;background:rgba(255,90,40,.1);color:#ffd2c0;font:600 .72rem/1.5 system-ui,sans-serif}
+.v15-master{display:flex;align-items:center;gap:10px;margin:12px 0;padding:10px 12px;border:1px solid var(--v15-line);border-radius:10px;font:800 .75rem Orbitron,system-ui,sans-serif;letter-spacing:.1em;color:#fff;cursor:pointer;min-height:44px}
+.v15-master input,.v15-gt input{width:22px;height:22px;accent-color:#ff5a2d}
+.v15-god.off{opacity:.4;pointer-events:none;filter:grayscale(.6)}
+.v15-gt{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:6px;margin-bottom:12px}
+.v15-gt label{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,.04);border-radius:8px;font:600 .72rem system-ui,sans-serif;color:#d6e6f5;min-height:40px;cursor:pointer}
+.v15-sl{display:flex;align-items:center;gap:10px;margin:8px 0;font:700 .65rem Orbitron,system-ui,sans-serif;letter-spacing:.08em;color:#bfe6ff}
+.v15-sl span{width:84px;flex:none}.v15-sl input{flex:1;min-height:32px;accent-color:var(--v15-ac)}.v15-sl b{width:34px;text-align:right;color:#fff}
+.v15-ga{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:12px}
+.v15-ga button{min-height:44px;border-radius:10px;border:1px solid #ff5a2d;background:rgba(255,90,40,.12);color:#ffe0d2;font:800 .62rem Orbitron,system-ui,sans-serif;letter-spacing:.08em;cursor:pointer;transition:background .15s,transform .08s}
+.v15-ga button:hover{background:rgba(255,90,40,.28)}.v15-ga button:active{transform:scale(.97)}
+
+/* ---- layout: v14's bottom grid + measured offsets (JS sets --v15-top / --v15-sh / --v15-bh) ---- */
+#v14CombatUI .v14-bottom{pointer-events:none}
+#v14CombatUI .v14-bottom>.v14-group{pointer-events:auto}
+.v14-powerbar{bottom:var(--v15-bh,100px)!important}
+.v14-target{top:var(--v15-top,100px)!important}
+.v14-system-grid{grid-template-columns:repeat(3,1fr)!important}
+.v14-system-grid .v14-btn{min-height:38px!important;font-size:7px!important}
+.v14-bottom{grid-template-columns:118px minmax(300px,1fr) minmax(210px,270px)}
+@media (max-width:900px){
+  .v14-bottom{grid-template-columns:96px minmax(0,1fr) minmax(130px,36vw)!important}
+  .v14-system-grid{grid-template-columns:repeat(2,1fr)!important}
+  .v14-system-grid .v14-btn[data-a="auto"],.v14-system-grid .v14-btn[data-a="sound"]{display:none}
+  .v14-system-grid .v14-btn{min-height:36px!important}
+  .v15-ultbtn{grid-column:1/-1;order:-1;min-height:42px!important}
+  .v14-target{top:calc(var(--v15-top,100px) + var(--v15-sh,26px) + 6px)!important;width:132px!important}
+  .v15-strip{max-width:96vw;gap:4px;top:var(--v15-top,100px)}
+  .v15-cell{padding:3px 6px;min-height:22px}.v15-cell span{display:none}.v15-bar{width:46px}
+  .v15-cell.ult span,.v15-cell.boss span{display:inline}
+  .v14-attack-readout{display:none}
+}
+@media (max-width:520px){
+  .v15-cell:nth-child(3),.v15-cell:nth-child(5){display:none}
+  .v15-keys{grid-template-columns:1fr}.v15-tabs button{font-size:.54rem;letter-spacing:.04em}
+  .v14-bottom{grid-template-columns:88px minmax(0,1fr) minmax(120px,38vw)!important;gap:4px!important}
+}
+@media (max-height:460px) and (orientation:landscape){
+  .v14-bottom{grid-template-columns:96px minmax(0,1.1fr) minmax(0,1fr)!important}
+  .v14-system-grid{grid-template-columns:repeat(3,1fr)!important}.v15-ultbtn{grid-column:auto;order:0}
+  .v14-joystick{width:80px!important;height:80px!important}.v14-title{display:none}
+  .v14-group{padding:4px!important}.v14-btn.fire{min-height:50px!important}
+  .v14-target{top:calc(var(--v15-top,60px) + var(--v15-sh,24px) + 4px)!important;width:118px!important}
+  .v15-card{max-height:96vh}
+}
+@media (prefers-reduced-motion:reduce){.v15-cell.ult.rdy{animation:none}.v15-card{animation:none}}
+
+/* ---- v15 fixes: pause overlay above the HUD, grid items allowed to shrink, top actions stack on phones ---- */
+.pause-overlay{z-index:9000!important}
+.v14-group,.v14-attack-grid>*,.v14-system-grid>*,.v14-top>*{min-width:0}
+.v14-system-grid .v14-btn,.v14-attack-grid .v14-btn{padding:0 3px!important;overflow:hidden;line-height:1.05;white-space:normal;word-break:break-word}
+.v14-keystrip{bottom:auto!important;top:calc(var(--v15-top,100px) + var(--v15-sh,28px) + 4px)}
+@media (max-width:900px){
+  .v14-top-actions{grid-template-columns:1fr!important}
+  #v14CombatUI .v14-top{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(64px,.5fr)!important}
+  .v14-top-actions .v14-btn{min-height:34px!important;font-size:7px!important;padding:0 4px!important}
+}
+
+/* ---- very narrow phones (≤340px): 2-column attack pad, trimmed system pad ---- */
+@media (max-width:340px){
+  .v14-bottom{grid-template-columns:76px minmax(0,1fr) 104px!important;gap:3px!important}
+  .v14-joystick{width:68px!important;height:68px!important}
+  .v14-attack-grid{grid-template-columns:1fr 1fr!important;gap:4px!important}
+  .v14-attack-grid .fire{grid-column:1!important;grid-row:1/span 2!important;min-height:76px!important}
+  .v14-attack-grid .missile{grid-column:2!important;grid-row:1!important}
+  .v14-attack-grid .weapon{grid-column:2!important;grid-row:2!important}
+  .v14-attack-grid [data-a="weaponPrev"]{display:none}
+  .v14-attack-grid .v14-btn:not(.fire){min-height:36px!important;font-size:6px!important}
+  .v14-system-grid .v14-btn[data-a="ship"],.v14-system-grid .v14-btn[data-a="recharge"]{display:none}
+  .v14-system-grid .v14-btn{font-size:6px!important}
+}
+@media (max-height:460px) and (orientation:landscape){.v14-status{display:none!important}.v14-vitals{padding:4px 6px!important}.v14-health-row{margin:3px 0!important}}
+
+/* v15.1 deterministic boot */
+.nebula-boot{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,rgba(13,42,66,.96),rgba(1,5,10,.99) 65%);color:#e8fbff;font-family:Orbitron,system-ui,sans-serif;transition:opacity .3s,visibility .3s;}
+.nebula-boot.ready{opacity:0;visibility:hidden;pointer-events:none}
+.nebula-boot.error{background:rgba(8,2,8,.99)}
+.nebula-boot-card{width:min(560px,calc(100vw - 32px));padding:30px;border:1px solid rgba(93,225,255,.35);border-radius:16px;background:linear-gradient(180deg,rgba(7,20,32,.96),rgba(2,8,14,.96));box-shadow:0 24px 80px rgba(0,0,0,.55),inset 0 1px rgba(255,255,255,.05);text-align:center}
+.nebula-boot-eyebrow{font:800 10px Rajdhani,sans-serif;letter-spacing:.28em;color:#6eafc9}.nebula-boot-title{margin:7px 0 18px;font-size:clamp(24px,7vw,42px);font-weight:900;letter-spacing:.12em;text-shadow:0 0 24px rgba(83,221,255,.35)}
+.nebula-boot-status{font-size:12px;letter-spacing:.14em;color:#6dffbf}.nebula-boot-line{height:5px;margin:18px 0 12px;border:1px solid rgba(91,222,255,.2);border-radius:10px;overflow:hidden;background:rgba(255,255,255,.04)}.nebula-boot-line i{display:block;width:45%;height:100%;background:linear-gradient(90deg,transparent,#4de5ff,#7dffcf,transparent);animation:nebulaBootScan 1.2s linear infinite}
+.nebula-boot-detail{min-height:18px;color:#93aabd;font:700 10px Rajdhani,sans-serif;letter-spacing:.06em}.nebula-boot-version{margin-top:12px;color:#587588;font:700 8px Rajdhani,sans-serif;letter-spacing:.12em}.nebula-boot.error .nebula-boot-status{color:#ff6b88}.nebula-boot.error .nebula-boot-line i{background:#ff456f;animation:none;width:100%}@keyframes nebulaBootScan{from{transform:translateX(-120%)}to{transform:translateX(330%)}}

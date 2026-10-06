@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="nebula-version" content="v15.1.1">
+<meta name="nebula-build" content="15.1.1.20261001">
+<title>NEBULA PROTOCOL — ASCENSION v15.1.1 // GALACTIC WAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?build=15.1.1.20261001">
+<link rel="stylesheet" href="v8.css?build=15.1.1.20261001">
+<link rel="stylesheet" href="v9.css?build=15.1.1.20261001">
+<link rel="stylesheet" href="v11.css?build=15.1.1.20261001">
+<link rel="stylesheet" href="v12.css?build=15.1.1.20261001">
+<link rel="stylesheet" href="v13.css?build=15.1.1.20261001">
+<link rel="stylesheet" href="v14.css?build=15.1.1.20261001">
+<link rel="stylesheet" href="v15.css?build=15.1.1.20261001">
+</head>
+<body>
+  <div id="nebulaBoot" class="nebula-boot" aria-live="polite"><div class="nebula-boot-card"><div class="nebula-boot-eyebrow">NEBULA PROTOCOL</div><div class="nebula-boot-title">ASCENSION</div><div id="nebulaBootStatus" class="nebula-boot-status">BOOTING</div><div class="nebula-boot-line"><i></i></div><div id="nebulaBootDetail" class="nebula-boot-detail">Loading verified build…</div><div id="nebulaBootVersion" class="nebula-boot-version">v15.1.1 · BUILD 15.1.1.20261001</div></div></div>
+<div class="crt-overlay"></div>
+<canvas id="gameCanvas"></canvas>
+<div id="uiContainer">
+  <div id="cinematicVignette" aria-hidden="true"></div>
+  <div id="hud" class="hidden">
+    <div class="hud-top">
+      <div class="stats-group">
+        <div class="stat-card mode-card"><span>MISSION</span><b id="modeVal">FRONTIER</b></div>
+        <div class="stat-card"><span>SCORE</span><b id="scoreVal">0000000</b></div>
+        <div class="stat-card"><span>LEVEL</span><b id="levelVal">01 / 10,000</b></div>
+        <div class="stat-card"><span>WAVE</span><b id="waveVal">1 / 4</b></div>
+        <div class="stat-card"><span>CREDITS</span><b id="coinVal">0</b></div>
+        <div class="stat-card"><span>COMBO</span><b id="comboVal">x1.0</b></div>
+      </div>
+      <div class="hud-actions"><button id="autoFireBtn" class="btn mini hud-auto">AUTO: OFF</button><button id="pauseBtn" class="btn mini hud-pause">Ⅱ PAUSE</button><button id="exitBtn" class="btn mini hud-exit">EXIT</button><div id="activePowerups" class="powerup-hud"></div></div>
+    </div>
+    <div id="levelBanner" class="level-banner hidden"></div>
+    <div class="mission-hud"><div class="mission-label">ACTIVE DIRECTIVE</div><b id="missionVal">DESTROY HOSTILES</b><span id="missionProgress">0 / 25</span></div>
+    <div class="combat-radar"><div class="radar-ring r1"></div><div class="radar-ring r2"></div><div class="radar-sweep"></div><div class="radar-dot player-dot"></div><div id="radarDots"></div></div>
+    <div class="mode-timer hidden" id="modeTimer">TIME <b id="timerVal">90</b></div>
+    <div id="bossHpContainer" class="boss-hp-container hidden">
+      <div id="bossName" class="boss-title">BOSS</div>
+      <div id="bossPowerText" class="boss-subtitle">UNKNOWN POWER</div>
+      <div class="bar-bg boss-bg"><div id="bossHpBar" class="bar-fill boss-fill"></div></div>
+    </div>
+    <div class="hud-bottom">
+      <div class="status-bars">
+        <div class="bar-header"><span>HULL INTEGRITY</span><b id="hpText">100 / 100</b></div><div class="bar-bg"><div id="hpBar" class="bar-fill hp-fill"></div></div>
+        <div class="bar-header"><span>AEGIS SHIELD</span><b id="shieldText">50 / 50</b></div><div class="bar-bg"><div id="shieldBar" class="bar-fill shield-fill"></div></div>
+        <div class="bar-header"><span>CORE ENERGY</span><b id="energyText">100 / 100</b></div><div class="bar-bg"><div id="energyBar" class="bar-fill energy-fill"></div></div>
+      </div>
+      <div class="controls">MOUSE+WASD · FIRE: LMB/SPACE · MISSILES: RMB · WEAPON: Q · LOCK: T/MMB · POWERS: 1-4 · DASH: SHIFT · SPECIAL: E · PAUSE: ESC</div>
+      <div class="mobile-controls" id="mobileControls"><button id="mobileSpecial" class="touch-btn special-touch">SPECIAL</button><button id="mobileFire" class="touch-btn fire-touch">FIRE</button></div>
+    </div>
+  </div>
+
+  <section id="mainMenu" class="screen cyber-panel">
+    <div class="eyebrow">HYPERION // ASCENSION COMBAT NETWORK ONLINE</div>
+    <h1>NEBULA<span>PROTOCOL</span></h1>
+    <div class="hero-sub"><span>DEEP-SPACE COMBAT SIMULATION</span><i></i><span>SECTOR 001 → 1,000 · 10,000 LEVELS · V14 COMMAND MATRIX</span></div>
+    <p class="tagline">A CINEMATIC DEEP-SPACE WARFARE SIMULATION — ADAPT, DESTROY, UPGRADE, HUNT COMMANDERS, CONQUER THE FRONTIER.</p>
+    <div class="menu-stats">
+      <div><small>BEST LEVEL</small><strong id="bestStage">1 / 10,000</strong></div>
+      <div><small>BEST SCORE</small><strong id="bestScore">0</strong></div>
+      <div><small>FLEET</small><strong id="fleetCount">1 / 60</strong></div>
+    </div>
+    <div class="mode-selector"><div class="section-title">MISSION PROFILE</div><div class="mode-grid"><button class="mode-btn active" data-mode="ENDLESS"><strong>FRONTIER</strong><span>LEVEL 1 → 10,000 // ASCENSION</span></button><button class="mode-btn" data-mode="SURVIVAL"><strong>SURVIVAL</strong><span>ENDLESS WAVES</span></button><button class="mode-btn" data-mode="BOSS_RUSH"><strong>BOSS RUSH</strong><span>BACK-TO-BACK BOSSES</span></button><button class="mode-btn" data-mode="TIME_ATTACK"><strong>TIME ATTACK</strong><span>90 SECOND ASSAULT</span></button></div></div>
+    <div class="menu-actions">
+      <button id="startBtn" class="btn primary">LAUNCH MISSION</button>
+      <button id="levelSelectBtn" class="btn">SELECT LEVEL 1–10,000</button>
+      <button id="upgradeBtn" class="btn">ARMORY & HANGAR</button>
+      <div class="secondary-actions"><button id="missionsBtn" class="btn">MISSIONS</button><button id="codexBtn" class="btn">CODEX</button><button id="settingsBtn" class="btn">SETTINGS</button></div>
+      <button id="resetBtn" class="btn danger-soft">RESET SAVE</button>
+    </div>
+    <div class="feature-strip"><span>✦ ADAPTIVE ENEMY AI</span><span>✦ PHASED COMMANDERS</span><span>✦ 300 SHIP FLEET</span><span>✦ CINEMATIC VFX</span><span>✦ 15 POWER SYSTEMS</span><span>✦ MISSIONS & ACHIEVEMENTS</span></div>
+    <div class="tip">ASCENSION v15.1.1 BUILD // Persistent local warfront, contracts, modules and galaxy control. Progress remains device-local. Boss Rush is a dedicated commander gauntlet with escalating phases, rewards and combat intensity.</div>
+  </section>
+
+  <section id="levelSelectMenu" class="screen cyber-panel wide hidden">
+    <div class="panel-head"><h2>LEVEL SELECT</h2><div>SECTORS UNLOCK WITH <b>PILOT LEVEL</b> &amp; BEST STAGE</div></div>
+    <p class="tip">Choose any level. Every sector is unlocked for direct play.</p>
+    <div class="level-picker"><button id="prevLevelPage" class="btn mini">◀ PREV</button><input id="levelPage" type="number" min="1" max="100" value="1" inputmode="numeric" aria-label="Level page"><button id="levelPageGo" class="btn mini">GO</button><button id="nextLevelPage" class="btn mini">NEXT ▶</button><span id="levelPageInfo">LEVELS 1–100 / 10,000</span></div>
+    <div id="levelGrid" class="level-grid"></div>
+    <button id="closeLevelSelectBtn" class="btn secondary">RETURN TO BRIDGE</button>
+  </section>
+
+  <section id="upgradeMenu" class="screen cyber-panel wide hidden">
+    <div class="panel-head"><h2>ARMADA HANGAR</h2><div>CREDITS <b id="shopCoins">0</b></div></div>
+    <div class="tabs"><button class="tab active" data-tab="ships">FLEET</button><button class="tab" data-tab="upgrades">UPGRADES</button></div>
+    <div id="shipsTab" class="tab-content">
+      <div class="section-title">SELECT YOUR SHIP</div>
+      <div id="shipCards" class="ship-grid"></div>
+    </div>
+    <div id="upgradesTab" class="tab-content hidden">
+      <div class="section-title">CORE UPGRADES</div>
+      <div id="upgradesGrid" class="upgrade-grid"></div>
+    </div>
+    <button id="closeHangarBtn" class="btn secondary">RETURN TO BRIDGE</button>
+  </section>
+
+  <section id="missionsMenu" class="screen cyber-panel wide hidden">
+    <div class="panel-head"><h2>MISSION CONTROL</h2><div>LIVE OBJECTIVES</div></div>
+    <div class="mission-dashboard"><div class="mission-hero"><span>COMMAND NETWORK</span><strong id="missionStreak">STREAK 0</strong><p>Complete combat directives to earn credits and unlock progression rewards.</p></div><div id="missionCards" class="mission-cards"></div></div>
+    <button id="closeMissionsBtn" class="btn secondary">RETURN TO BRIDGE</button>
+  </section>
+  <section id="codexMenu" class="screen cyber-panel wide hidden">
+    <div class="panel-head"><h2>TACTICAL CODEX</h2><div>INTELLIGENCE DATABASE</div></div>
+    <div class="codex-grid"><article><b>ENEMY CLASSES</b><p>FIGHTER · SWARM · INTERCEPTOR · SNIPER · CARRIER · ELITE · BOMBER · HUNTER · SHIELD DRONE · ASSASSIN</p></article><article><b>BOSS PROTOCOL</b><p>Every fifth level is a boss sector. Destroy shield generators to expose the core, knock out turrets, engines and armor to change its behaviour. Four phases: Engage, Armed, Arena hazards, Final overload.</p></article><article><b>COMBAT LOOP</b><p>Build combo → collect powers → chain abilities → defeat waves → upgrade the fleet.</p></article><article><b>TACTICAL NOTE</b><p>Late-game enemies become faster, tougher and more aggressive. Different ship profiles reward different play styles.</p></article></div>
+    <button id="closeCodexBtn" class="btn secondary">RETURN TO BRIDGE</button>
+  </section>
+  <section id="settingsMenu" class="screen cyber-panel hidden">
+    <div class="eyebrow">SYSTEM CONFIGURATION</div><h2>SETTINGS</h2>
+    <div class="settings-list"><label><span>CRT EFFECT</span><input id="crtToggle" type="checkbox" checked></label><label><span>REDUCED PARTICLES</span><input id="particlesToggle" type="checkbox"></label><label><span>SCREEN SHAKE</span><input id="shakeToggle" type="checkbox" checked></label></div>
+    <button id="closeSettingsBtn" class="btn secondary">RETURN TO BRIDGE</button>
+  </section>
+
+  <section id="gameOverMenu" class="screen cyber-panel hidden">
+    <div class="eyebrow">MISSION DEBRIEF</div>
+    <h2 id="gameOverTitle">RUN TERMINATED</h2>
+    <p id="gameOverReason">The frontier claimed your ship.</p>
+    <div class="summary">
+      <div><span>LEVEL</span><b id="finalWave">1 / 10000</b></div>
+      <div><span>SCORE</span><b id="finalScore">0</b></div>
+      <div><span>CREDITS</span><b id="finalCoins">0</b></div>
+      <div><span>BOSSES</span><b id="finalBosses">0</b></div>
+      <div><span>BEST COMBO</span><b id="finalCombo">x1.0</b></div>
+    </div>
+    <div class="gameover-actions"><button id="restartBtn" class="btn primary">REDEPLOY</button><button id="nextLevelBtn" class="btn hidden">NEXT LEVEL ▶</button><button id="menuBtn" class="btn">MAIN MENU</button></div>
+  </section>
+
+  <div id="pauseOverlay" class="pause-overlay hidden"><div class="pause-box cyber-panel"><div class="eyebrow">SYSTEM HOLD</div><h2>PAUSED</h2><p>Press P or tap RESUME.</p><div class="pause-actions"><button id="resumeBtn" class="btn primary">RESUME</button><button id="pauseExitBtn" class="btn secondary">EXIT TO BRIDGE</button></div></div></div>
+  <div id="toast" class="toast hidden"></div>
+</div>
+<script src="v15-boot.js?build=15.1.1.20261001"></script>
+<script src="script.js?build=15.1.1.20261001"></script>
+<script src="v6.js?build=15.1.1.20261001"></script>
+<script src="v7.js?build=15.1.1.20261001"></script>
+<script src="v8-env.js?build=15.1.1.20261001"></script>
+<script src="v8-ships.js?build=15.1.1.20261001"></script>
+<script src="v8-weapons.js?build=15.1.1.20261001"></script>
+<script src="v8-powers.js?build=15.1.1.20261001"></script>
+<script src="v8-enemies.js?build=15.1.1.20261001"></script>
+<script src="v8-boss.js?build=15.1.1.20261001"></script>
+<script src="v8-meta.js?build=15.1.1.20261001"></script>
+<script src="v8-ui.js?build=15.1.1.20261001"></script>
+<script src="v9-save.js?build=15.1.1.20261001"></script>
+<script src="v9-factions.js?build=15.1.1.20261001"></script>
+<script src="v9-galaxy.js?build=15.1.1.20261001"></script>
+<script src="v9-loot.js?build=15.1.1.20261001"></script>
+<script src="v9-achievements.js?build=15.1.1.20261001"></script>
+<script src="v9-stats.js?build=15.1.1.20261001"></script>
+<script src="v9-missions.js?build=15.1.1.20261001"></script>
+<script src="v9-capital.js?build=15.1.1.20261001"></script>
+<script src="v9-combat.js?build=15.1.1.20261001"></script>
+<script src="v9-events.js?build=15.1.1.20261001"></script>
+<script src="v9-campaign.js?build=15.1.1.20261001"></script>
+<script src="v9-customization.js?build=15.1.1.20261001"></script>
+<script src="v9-audio.js?build=15.1.1.20261001"></script>
+<script src="v9-ui.js?build=15.1.1.20261001"></script>
+<script src="v11-ui.js?build=15.1.1.20261001"></script>
+<script src="v12-difficulty.js?build=15.1.1.20261001"></script>
+<script src="v12-ui.js?build=15.1.1.20261001"></script>
+<script src="v13-combat.js?build=15.1.1.20261001"></script>
+<script src="v13-ui.js?build=15.1.1.20261001"></script>
+<script src="v14-audio.js?build=15.1.1.20261001"></script>
+<script src="v14-ui.js?build=15.1.1.20261001"></script>
+<script src="v15-core.js?build=15.1.1.20261001"></script>
+<script src="v15-fx.js?build=15.1.1.20261001"></script>
+<script src="v15-ui.js?build=15.1.1.20261001"></script>
+</body>
+</html>
